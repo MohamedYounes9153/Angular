@@ -1,0 +1,20 @@
+mat-sidenav-container {
+    height: 100vh; /* Assure que le conteneur occupe toute la hauteur de la fenêtre */
+  }
+  
+  mat-sidenav {
+    width: 250px; /* Largeur de la sidebar */
+  }
+  
+  mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Assure que le contenu principal occupe toute la hauteur */
+  }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Empêche les barres de défilement inutiles */
+  }

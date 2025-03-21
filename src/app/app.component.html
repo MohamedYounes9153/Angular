@@ -1,13 +1,34 @@
-<h1>
-  <nav>
-    <a routerLink="/home">{{titre}}</a>
-  </nav>
-</h1>
-<button mat-raised-button color="primary" (click)="genererDonneesDeTest()">
-  PEUPLER BD AVEC DONNEES DE TEST
-</button>
-<!-- On va afficher le composant correspondant 
-     à la route active
--->
-<router-outlet></router-outlet>
+<mat-sidenav-container>
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened>
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/home">Accueil</a>
+      <a mat-list-item routerLink="/autre">Autre lien</a>
+    </mat-nav-list>
+  </mat-sidenav>
 
+  <!-- Contenu principal -->
+  <mat-sidenav-content>
+    <!-- Toolbar -->
+    <mat-toolbar color="primary">
+      <span>{{ titre }}</span>
+      <span style="flex: 1 1 auto;"></span>
+      <button mat-button routerLink="/home">Accueil</button>
+      <button mat-button routerLink="/autre">Autre</button>
+      <button mat-icon-button aria-label="Profil utilisateur">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Contenu -->
+    <div style="padding: 16px;">
+      <h1>Bienvenue dans {{ titre }}</h1>
+      <button mat-raised-button color="primary" (click)="genererDonneesDeTest()">
+        PEUPLER BD AVEC DONNEES DE TEST
+      </button>
+      <!-- On va afficher le composant correspondant à la route active -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
