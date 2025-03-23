@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { Assignment } from './assignment.model';
 import { AssignmentsService } from '../shared/assignments.service';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-assignments',
@@ -44,8 +45,9 @@ export class AssignmentsComponent implements OnInit {
 
   // Attention, pour l'injection de service, mettre en private !!! Sinon
   // ça ne marche pas
-  constructor(private assignementsService: AssignmentsService,
-              private router: Router) {}
+  constructor(private assignmentsService: AssignmentsService,
+              private assignementsService: AssignmentsService,
+              private router: Router, public authService: AuthService) {}
 
   ngOnInit() {
     console.log("ngOnInit appelé lors de l'instanciation du composant");
@@ -120,5 +122,27 @@ export class AssignmentsComponent implements OnInit {
     let id = row._id;
     // et on utilise le routeur pour afficher le détail de l'assignment
     this.router.navigate(['/assignments', id]);
+  }
+  modifierAssignment(assignment: Assignment): void {
+    if (!this.authService.isAdmin()) {
+      console.log('Accès refusé : vous devez être admin pour modifier un assignment.');
+      return;
+    }
+
+    console.log('Modification de l\'assignment :', assignment);
+    this.router.navigate(['/assignments', assignment._id, 'edit']);
+  }
+
+  supprimerAssignment(assignment: Assignment): void {
+    if (!this.authService.isAdmin()) {
+      console.log('Accès refusé : vous devez être admin pour supprimer un assignment.');
+      return;
+    }
+
+    console.log('Suppression de l\'assignment :', assignment);
+    this.assignmentsService.deleteAssignment(assignment).subscribe(() => {
+      console.log('Assignment supprimé avec succès');
+      this.getAssignments(); // Recharge la liste des assignments
+    });
   }
 }

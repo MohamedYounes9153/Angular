@@ -1,6 +1,6 @@
-<mat-sidenav-container>
+<mat-sidenav-container class="example-container">
   <!-- Sidebar -->
-  <mat-sidenav mode="side" opened>
+  <mat-sidenav #sidenav mode="side" [(opened)]="isSidenavOpened">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/home">Accueil</a>
@@ -12,11 +12,15 @@
   <mat-sidenav-content>
     <!-- Toolbar -->
     <mat-toolbar color="primary">
+      <!-- Bouton pour ouvrir/fermer la sidebar -->
+      <button mat-icon-button (click)="toggleSidenav()">
+        <mat-icon>{{ isSidenavOpened ? 'close' : 'menu' }}</mat-icon>
+      </button>
       <span>{{ titre }}</span>
       <span style="flex: 1 1 auto;"></span>
       <button mat-button routerLink="/home">Accueil</button>
       <button mat-button routerLink="/autre">Autre</button>
-      <button mat-icon-button aria-label="Profil utilisateur">
+      <button mat-icon-button aria-label="Profil utilisateur" (click)="logout()">
         <mat-icon>account_circle</mat-icon>
       </button>
     </mat-toolbar>

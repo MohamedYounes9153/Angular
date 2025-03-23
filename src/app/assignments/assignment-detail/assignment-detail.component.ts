@@ -7,7 +7,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AssignmentsService } from '../../shared/assignments.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
-
+import { AuthService } from '../../shared/auth.service';
+import { AssignmentsComponent } from '../assignments.component';
 @Component({
   selector: 'app-assignment-detail',
   imports: [MatCardModule, CommonModule, MatButtonModule, 
@@ -24,6 +25,8 @@ export class AssignmentDetailComponent implements OnInit{
 
   constructor(private assignmentsService:AssignmentsService, 
     private route:ActivatedRoute,
+    private assignmentsComponent:AssignmentsComponent,
+    public authService: AuthService,
     private router:Router) {}
 
   ngOnInit(): void {
@@ -75,19 +78,28 @@ export class AssignmentDetailComponent implements OnInit{
     });
   }
 
-  onDeleteAssignment() {
-    if(!this.assignmentTransmis) return;
-    
-    // On utilise le service pour supprimer l'assignment
-    this.assignmentsService.deleteAssignment(this.assignmentTransmis)
-    .subscribe(message => {
-      console.log(message);
-      // on cache la vue de détail puisque
-      // l'assignment a été supprimé
-      this.assignmentTransmis = undefined;
-      // On re  affiche la liste
-      this.router.navigate(['/home']);
-    });
+  modifierAssignment(): void {
+    if (!this.assignmentTransmis) return;
+
+    console.log('Modification de l\'assignment :', this.assignmentTransmis);
+    this.router.navigate(['/assignments', this.assignmentTransmis._id, 'edit']);
+    window.location.reload();
+    this.assignmentsComponent.getAssignments(); // Recharge la liste des assignments
   }
 
+  supprimerAssignment(): void {
+    if (!this.assignmentTransmis) return;
+
+    if (!this.authService.isAdmin()) {
+      console.log('Accès refusé : vous devez être admin pour supprimer un assignment.');
+      return;
+    }
+
+    console.log('Suppression de l\'assignment :', this.assignmentTransmis);
+    this.assignmentsService.deleteAssignment(this.assignmentTransmis).subscribe(() => {
+      console.log('Assignment supprimé avec succès');
+      this.router.navigate(['/home']);
+      this.assignmentsComponent.getAssignments(); // Recharge la liste des assignments
+    });
+  }
 }
